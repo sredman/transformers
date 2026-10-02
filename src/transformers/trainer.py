@@ -1675,6 +1675,9 @@ class Trainer:
                 )
                 self.state.best_model_checkpoint = None
             compare_trainer_and_checkpoint_args(self.args, self.state)
+            # The loaded state carries the cadence of the run that wrote the checkpoint;
+            # this run's arguments are the ones that should take effect.
+            self.state.compute_steps(self.args, max_steps)
             self._load_callback_state()
             epochs_trained = int(self.state.global_step // num_update_steps_per_epoch)
             if not self.args.ignore_data_skip:
